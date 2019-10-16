@@ -1,1 +1,23 @@
-/bin/
+/.settings/
+/target/
+/.classpath
+/.project
+/.factorypath
+
+# IntelliJ project files
+.idea/
+*.iml
+out
+gen
+venv/
+
+# Project
+*/__pychace__/
+.vagrant/
+*/_build/
+*egg-info/
+src/docs/asciidoc/generated
+public/
+.gradle/
+build/
+target/

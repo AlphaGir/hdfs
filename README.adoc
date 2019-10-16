@@ -1,0 +1,11 @@
+= Hadoop HDFS 文件上传
+
+image::https://hadoop.apache.org/hadoop-logo.jpg[Hadoop Logo]
+
+== 运行项目
+
+.PowerShell
+[source,powershell]
+----
+mvn clean package
+----

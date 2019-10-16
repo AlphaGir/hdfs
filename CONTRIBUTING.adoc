@@ -1,0 +1,96 @@
+= 开发帮助
+
+== Windows 环境搭建
+
+安装 OpenJDK 11，Hadoop，Hadoop Winutils 三项内容。
+
+下载以下内容并解压到计算机的任意位置。
+
+- OpenJDK 11：link:https://download.java.net/openjdk/jdk11/ri/openjdk-11+28_windows-x64_bin.zip[]
+- Hadoop 3.2.1：link:https://mirrors.tuna.tsinghua.edu.cn/apache/hadoop/common/hadoop-3.2.1/hadoop-3.2.1.tar.gz[]
+
+假设二者都解压到了 D 盘根目录，在系统中设置以下几个环境变量：
+
+- JAVA_HOME=D:\jdk-11.0.2
+- HADOOP_HOME=D:\hadoop-3.2.1
+
+在 PATH 中设置：
+
+- %HADOOP_HOME%\bin
+- %HADOOP_HOME%\sbin
+
+两个变量。
+
+将 `Winutils` 存储到 `${HADOOP_HOME}/bin` 中。
+
+link:https://github.com/steveloughran/winutils/blob/master/hadoop-3.0.0/bin/winutils.exe[]
+
+修改以下文件：
+
+.${HADOOP_HOME}/etc/hadoop/core-site.xml
+[source,xml]
+----
+<configuration>
+    <property>
+        <name>fs.defaultFS</name>
+        <value>hdfs://localhost:8020</value>
+    </property>
+</configuration>
+----
+
+.${HADOOP_HOME}/etc/hadoop/mapred-site.xml
+[source,xml]
+----
+<configuration>
+   <property>
+       <name>mapreduce.framework.name</name>
+       <value>yarn</value>
+   </property>
+</configuration>
+----
+
+在 `${HADOOP_HOME}` 中创建一个 `data` 目录。
+
+.${HADOOP_HOME}/etc/hadoop/hdfs-site.xml
+[source,xml]
+----
+<configuration>
+   <property>
+       <name>dfs.replication</name>
+       <value>1</value>
+   </property>
+   <property>
+       <name>dfs.namenode.name.dir</name>
+       <value>D:\\hadoop-3.2.1\\data\\nn</value>
+   </property>
+   <property>
+       <name>dfs.datanode.data.dir</name>
+       <value>D:\\hadoop-3.2.1\\data\\dn</value>
+   </property>
+</configuration>
+----
+
+.${HADOOP_HOME}/etc/hadoop/yarn-site.xml
+[source,xml]
+----
+<configuration>
+   <property>
+    	<name>yarn.nodemanager.aux-services</name>
+    	<value>mapreduce_shuffle</value>
+   </property>
+   <property>
+      	<name>yarn.nodemanager.auxservices.mapreduce.shuffle.class</name>
+	<value>org.apache.hadoop.mapred.ShuffleHandler</value>
+   </property>
+</configuration>
+----
+
+设置 `.${HADOOP_HOME}/etc/hadoop/hadoop-env.cmd` 中的 `JAVA_HOME` 环境变量。
+
+在 `${HADOOP_HOME}/bin` 执行以下操作：
+
+.PowerShell
+[source,powershell]
+----
+.\hdfs.cmd namenode -format
+----
